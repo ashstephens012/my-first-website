@@ -1,64 +1,40 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-blue-50 font-sans dark:bg-slate-900">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-slate-800 sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-blue-900 dark:text-blue-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-blue-700 dark:text-blue-200">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-blue-600 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-100"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-blue-600 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-100"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-blue-600 px-5 text-white transition-colors hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-400 md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border-2 border-solid border-blue-600 px-5 text-blue-600 transition-colors hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-950 md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+      <main className="mx-auto max-w-5xl px-6 py-24">
+        <header className="flex items-center justify-between mb-12">
+          <div className="flex items-center gap-3">
+            <div className="h-12 w-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">T</div>
+            <div>
+              <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">TIO Learning</h1>
+              <p className="text-sm text-slate-500 dark:text-slate-300">Teach. Inspire. Organize.</p>
+            </div>
+          </div>
+          <nav className="flex items-center gap-4">
+            <Link href="/courses" className="text-sm font-medium text-blue-600">Courses</Link>
+            <Link href="/signin" className="text-sm px-3 py-1 rounded-md border border-transparent bg-blue-600 text-white">Sign in</Link>
+          </nav>
+        </header>
+
+        <section className="rounded-2xl bg-white shadow-lg p-12 dark:bg-slate-800">
+          <div className="flex flex-col gap-8 md:flex-row md:items-center">
+            <div className="md:flex-1">
+              <h2 className="text-4xl font-extrabold leading-tight text-slate-900 dark:text-white">Welcome to the TIO Learning platform</h2>
+              <p className="mt-4 max-w-xl text-lg text-slate-600 dark:text-slate-300">A simple, focused learning management system for instructors and learners. Browse curated courses, enroll, and access resources — or create your own content from the instructor dashboard.</p>
+              <div className="mt-6 flex gap-4">
+                <Link href="/courses" className="inline-flex items-center rounded-md bg-blue-600 px-5 py-3 text-white font-medium">Explore Courses</Link>
+                <Link href="/dashboard" className="inline-flex items-center rounded-md border border-slate-200 px-5 py-3 text-slate-700 dark:text-slate-200">Instructor Dashboard</Link>
+              </div>
+            </div>
+
+            <div className="md:w-80 md:flex-shrink-0">
+              <Image src="/hero-illustration.svg" alt="Learning illustration" width={480} height={320} className="rounded-lg object-cover" />
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   );

@@ -1,10 +1,12 @@
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
 
-type Props = { params: { slug: string } };
+type Props = { params: any };
 
 export default async function CoursePage({ params }: Props) {
-  const { slug } = params;
+  const { slug } = (await params) as { slug: string };
+  if (!slug || typeof slug !== 'string') return <div className="p-8">Course not found</div>;
+
   const course = await prisma.course.findUnique({ where: { slug }, include: { lessons: { orderBy: { order: 'asc' } }, instructor: true } });
   if (!course) return <div className="p-8">Course not found</div>;
 
