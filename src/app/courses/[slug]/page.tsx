@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
+import { Lesson } from '@prisma/client';
 
 type Props = { params: any };
 
@@ -18,7 +19,7 @@ export default async function CoursePage({ params }: Props) {
 
       <h2 className="mt-6 text-lg font-medium">Lessons</h2>
       <ul className="mt-4 space-y-3">
-        {course.lessons.map((l) => (
+        {course.lessons.map((l: Lesson) => (
           <li key={l.id} className="p-3 border rounded">
             <h3 className="font-medium">{l.title}</h3>
             <p className="text-sm text-gray-700">{l.content}</p>
