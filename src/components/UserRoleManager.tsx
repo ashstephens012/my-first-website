@@ -224,7 +224,7 @@ export default function UserRoleManager({ users, currentUserRole, currentUserId 
                 </td>
                 {isAdmin && (
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
-                    {user.role !== 'MEMBER' && (
+                    {user.role !== 'MEMBER' && !isSelf && (
                       <div className="flex flex-col items-end gap-2">
                         {/* Password change inline form */}
                         {changePasswordId === user.id ? (
@@ -260,15 +260,13 @@ export default function UserRoleManager({ users, currentUserRole, currentUserId 
                             >
                               Change Password
                             </button>
-                            {!isSelf && (
-                              <button
-                                onClick={() => handleSendReset(user.id)}
-                                disabled={loading === user.id}
-                                className="text-brand-navy hover:text-opacity-80 text-xs font-medium disabled:opacity-50"
-                              >
-                                {loading === user.id ? 'Sending…' : 'Send Reset'}
-                              </button>
-                            )}
+                            <button
+                              onClick={() => handleSendReset(user.id)}
+                              disabled={loading === user.id}
+                              className="text-brand-navy hover:text-opacity-80 text-xs font-medium disabled:opacity-50"
+                            >
+                              {loading === user.id ? 'Sending…' : 'Send Reset'}
+                            </button>
                           </div>
                         )}
                         {/* Reset email feedback */}
@@ -277,10 +275,8 @@ export default function UserRoleManager({ users, currentUserRole, currentUserId 
                             {resetEmailStatus.message}
                           </span>
                         )}
-                        {/* Delete / You label */}
-                        {isSelf ? (
-                          <span className="text-xs text-gray-400">You</span>
-                        ) : confirmDeleteId === user.id ? (
+                        {/* Delete confirmation */}
+                        {confirmDeleteId === user.id ? (
                           <span className="inline-flex items-center gap-2">
                             <span className="text-xs text-gray-500">Are you sure?</span>
                             <button
@@ -306,6 +302,9 @@ export default function UserRoleManager({ users, currentUserRole, currentUserId 
                           </button>
                         )}
                       </div>
+                    )}
+                    {isSelf && (
+                      <span className="text-xs text-gray-400">You</span>
                     )}
                   </td>
                 )}
