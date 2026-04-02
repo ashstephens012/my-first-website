@@ -310,10 +310,6 @@ export async function changeUserPassword(userId: string, newPassword: string) {
       return { success: false, error: 'Only admins can change passwords' };
     }
 
-    if (session.user.id === userId) {
-      return { success: false, error: 'Use the password reset page to change your own password' };
-    }
-
     const validated = changePasswordSchema.parse({ userId, newPassword });
 
     const user = await prisma.user.findUnique({ where: { id: validated.userId } });
