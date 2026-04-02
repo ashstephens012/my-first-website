@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/generate-reports",
+      "schedule": "0 0 1 * *"
+    },
+    {
+      "path": "/api/cron/sync-prm-contacts",
+      "schedule": "0 6 2 * *"
+    }
+  ]
+}

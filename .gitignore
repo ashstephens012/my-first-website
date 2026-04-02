@@ -40,3 +40,14 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .claude/
+
+# Reference/design assets (not needed for the app)
+/Century Gothic/
+/TIO UKI Tiers.pdf
+/Logo-14 (3).png
+/SOP logo.jpg
+/The Invisible Orthodontist Styleguide.jpg
+HUBSPOT_SETUP.md
+IMPLEMENTATION_SUMMARY.md
+QUICK_START.md
+SETUP_GUIDE.md

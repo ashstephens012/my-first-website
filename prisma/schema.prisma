@@ -4,7 +4,7 @@ generator client {
 
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -14,13 +14,14 @@ model User {
   email         String?    @unique
   emailVerified DateTime?
   image         String?
-  role          String     @default("LEARNER")
+  role          String     @default("USER")
   passwordHash  String?
+  memberId      String?
+  member        Member?    @relation(fields: [memberId], references: [id])
+  portalTier    Int?
+  jobTitle      String?
   accounts      Account[]
   sessions      Session[]
-  courses       Course[]   @relation("instructorCourses")
-  resources     Resource[]
-  enrollments   Enrollment[]
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
 }
@@ -61,58 +62,177 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+// HubSpot Reporting System Models
+
+model Member {
+  id                String   @id @default(cuid())
+  name              String
+  email             String   @unique
+  hubspotCompanyId  String   @unique
+  practiceType          String?
+  consultantName        String?
+  digitalStrategistName String?
+  region                    String?
+  annualCaseStartsTarget    String?
+  websiteUrl                String?
+  logoUrl           String?
+  allClientsAccountId       String?
+  allClientsApiKey          String?
+  status            String   @default("active")
+  memberSince       DateTime?
+  membershipTier    String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  reports                Report[]
+  users                  User[]
+  caseStartSubmissions   CaseStartSubmission[]
+  prmContactCounts       PrmContactCount[]
+  quarterlyFocuses       QuarterlyFocus[]
+  deliverables           MemberDeliverable[]
+}
+
+model CaseStartSubmission {
+  id         String   @id @default(cuid())
+  memberId   String
+  member     Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  year       Int
+  month      Int
+  caseStarts Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([memberId, year, month])
+}
+
+model PrmContactCount {
+  id           String   @id @default(cuid())
+  memberId     String
+  member       Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  year         Int
+  month        Int
+  contactCount Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([memberId, year, month])
+}
+
+model QuarterlyFocus {
+  id        String   @id @default(cuid())
+  memberId  String
+  year      Int
+  quarter   Int      // 1–4
+  focus     String
+  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([memberId, year, quarter])
+}
+
+model Report {
+  id              String           @id @default(cuid())
+  memberId        String
+  member          Member           @relation(fields: [memberId], references: [id])
+  reportMonth     DateTime
+  generatedAt     DateTime         @default(now())
+  status          String           @default("draft")
+  pdfUrl          String?
+  summary         String?
+  emailCount      Int              @default(0)
+  meetingCount    Int              @default(0)
+  activities      ReportActivity[]
+  reviewedBy      String?
+  reviewedAt      DateTime?
+  sentAt          DateTime?
+}
+
+model MemberDeliverable {
+  id               String                  @id @default(cuid())
+  memberId         String
+  member           Member                  @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  year             Int
+  category         String
+  name             String
+  annualAllocation Int
+  plannedMonth     Int?
+  plannedMonths    Int[]    @default([])
+  completions      DeliverableCompletion[]
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+
+  @@unique([memberId, year, name])
+}
+
+model DeliverableCompletion {
+  id                  String            @id @default(cuid())
+  memberDeliverableId String
+  memberDeliverable   MemberDeliverable @relation(fields: [memberDeliverableId], references: [id], onDelete: Cascade)
+  completedAt         DateTime
+  notes               String?
+  createdAt           DateTime          @default(now())
+}
+
+model ReportActivity {
+  id              String   @id @default(cuid())
+  reportId        String
+  report          Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  activityType    String
+  hubspotId       String
+  date            DateTime
+  subject         String
+  rawContent      String?
+  summary         String?
+  participants    String?
+  metadata        Json?
+}
+
+// Course Builder Models
+
 model Course {
-  id          String      @id @default(cuid())
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String?
+  difficulty  String?
+  status      String   @default("draft")
+  sourceUrl   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  modules     Module[]
+}
+
+model Module {
+  id          String   @id @default(cuid())
+  courseId     String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   title       String
   description String?
-  slug        String      @unique
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   lessons     Lesson[]
-  resources   Resource[]
-  instructor  User?       @relation("instructorCourses", fields: [instructorId], references: [id])
-  instructorId String?
-  enrollments Enrollment[]
-  published   Boolean     @default(false)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
 }
 
 model Lesson {
-  id        String     @id @default(cuid())
-  title     String
+  id          String         @id @default(cuid())
+  moduleId    String
+  module      Module         @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  sortOrder   Int            @default(0)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  contentBlocks ContentBlock[]
+}
+
+model ContentBlock {
+  id        String   @id @default(cuid())
+  lessonId  String
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  type      String
   content   String?
-  order     Int        @default(0)
-  course    Course     @relation(fields: [courseId], references: [id])
-  courseId  String
-  resources Resource[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-}
-
-
-
-model Resource {
-  id           String       @id @default(cuid())
-  title        String?
-  url          String
-  type         String?
-  uploadedBy   User?        @relation(fields: [uploadedById], references: [id])
-  uploadedById String?
-  course       Course?      @relation(fields: [courseId], references: [id])
-  courseId     String?
-  lesson       Lesson?      @relation(fields: [lessonId], references: [id])
-  lessonId     String?
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-}
-
-model Enrollment {
-  id         String   @id @default(cuid())
-  user       User     @relation(fields: [userId], references: [id])
-  userId     String
-  course     Course   @relation(fields: [courseId], references: [id])
-  courseId   String
-  progress   Float    @default(0)
-  enrolledAt DateTime @default(now())
-
-  @@unique([userId, courseId])
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

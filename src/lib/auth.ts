@@ -20,23 +20,51 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
-        const user = await prisma.user.findUnique({ where: { email: credentials.email } });
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email },
+          select: { id: true, name: true, email: true, role: true, passwordHash: true, memberId: true, portalTier: true },
+        });
         if (!user || !user.passwordHash) return null;
         const valid = await bcrypt.compare(credentials.password, user.passwordHash);
         if (!valid) return null;
-        return user as any;
+        return { id: user.id, name: user.name, email: user.email, role: user.role, memberId: user.memberId, portalTier: user.portalTier };
       },
     }),
   ],
-  session: { strategy: "database" },
+  session: { strategy: "jwt" },
   callbacks: {
-    async session({ session }) {
-      if (session?.user?.email) {
-        const dbUser = await prisma.user.findUnique({ where: { email: session.user.email } });
-        if (dbUser) {
-          (session.user as any).id = dbUser.id;
-          (session.user as any).role = dbUser.role;
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role;
+        token.memberId = user.memberId;
+        token.portalTier = user.portalTier;
+      }
+      // Ensure token.id is always set (token.sub is auto-populated by next-auth)
+      if (!token.id && token.sub) {
+        token.id = token.sub;
+      }
+      // Refresh role, memberId, and portalTier from the DB on every request
+      // so admin-side changes (e.g. tier updates) take effect immediately
+      if (token.id) {
+        const freshUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { role: true, memberId: true, portalTier: true },
+        });
+        if (freshUser) {
+          token.role = freshUser.role;
+          token.memberId = freshUser.memberId;
+          token.portalTier = freshUser.portalTier;
         }
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = (token.id as string) ?? token.sub;
+        session.user.role = token.role;
+        session.user.memberId = token.memberId;
+        session.user.portalTier = token.portalTier;
       }
       return session;
     },

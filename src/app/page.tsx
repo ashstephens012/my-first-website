@@ -1,41 +1,57 @@
-import Image from "next/image";
 import Link from "next/link";
+
+const sections = [
+  {
+    title: "Reports",
+    description: "Generate and view monthly consulting reports for your members.",
+    href: "/dashboard/reports",
+    icon: (
+      <svg className="h-8 w-8 text-brand-navy" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v-5.5m3 5.5V8.25m3 3v-2" />
+      </svg>
+    ),
+  },
+  {
+    title: "Members",
+    description: "View and manage practice members, contacts, and details.",
+    href: "/dashboard/members",
+    icon: (
+      <svg className="h-8 w-8 text-brand-navy" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.016A3.001 3.001 0 0 0 20.25 9.35m-16.5 0a3.004 3.004 0 0 1-.621-1.097L2.008 4.5h19.984l-1.121 3.753a3.004 3.004 0 0 1-.621 1.097" />
+      </svg>
+    ),
+  },
+];
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-      <main className="mx-auto max-w-5xl px-6 py-24">
-        <header className="flex items-center justify-between mb-12">
-          <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">T</div>
+    <main className="mx-auto max-w-4xl px-6 py-16">
+      <div className="mb-12 text-center">
+        <img src="/tio-logo.svg" alt="The Invisible Orthodontist" className="mx-auto mb-4 h-14" />
+        <h1 className="text-3xl font-bold text-brand-navy">Member Management Portal</h1>
+        <p className="mt-2 text-slate-500">Track. Report. Deliver.</p>
+      </div>
+
+      <div className="grid gap-6 sm:grid-cols-2">
+        {sections.map((s) => (
+          <Link
+            key={s.href}
+            href={s.href}
+            className="group flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-8 shadow-sm transition hover:shadow-md hover:border-brand-navy/30"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-brand-navy/5">
+              {s.icon}
+            </div>
             <div>
-              <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">TIO Learning</h1>
-              <p className="text-sm text-slate-500 dark:text-slate-300">Teach. Inspire. Organize.</p>
+              <h2 className="text-lg font-semibold text-brand-navy group-hover:text-brand-navy/80">{s.title}</h2>
+              <p className="mt-1 text-sm text-slate-500">{s.description}</p>
             </div>
-          </div>
-          <nav className="flex items-center gap-4">
-            <Link href="/courses" className="text-sm font-medium text-blue-600">Courses</Link>
-            <Link href="/signin" className="text-sm px-3 py-1 rounded-md border border-transparent bg-blue-600 text-white">Sign in</Link>
-          </nav>
-        </header>
-
-        <section className="rounded-2xl bg-white shadow-lg p-12 dark:bg-slate-800">
-          <div className="flex flex-col gap-8 md:flex-row md:items-center">
-            <div className="md:flex-1">
-              <h2 className="text-4xl font-extrabold leading-tight text-slate-900 dark:text-white">Welcome to the TIO Learning platform</h2>
-              <p className="mt-4 max-w-xl text-lg text-slate-600 dark:text-slate-300">A simple, focused learning management system for instructors and learners. Browse curated courses, enroll, and access resources — or create your own content from the instructor dashboard.</p>
-              <div className="mt-6 flex gap-4">
-                <Link href="/courses" className="inline-flex items-center rounded-md bg-blue-600 px-5 py-3 text-white font-medium">Explore Courses</Link>
-                <Link href="/dashboard" className="inline-flex items-center rounded-md border border-slate-200 px-5 py-3 text-slate-700 dark:text-slate-200">Instructor Dashboard</Link>
-              </div>
-            </div>
-
-            <div className="md:w-80 md:flex-shrink-0">
-              <Image src="/hero-illustration.svg" alt="Learning illustration" width={480} height={320} className="rounded-lg object-cover" />
-            </div>
-          </div>
-        </section>
-      </main>
-    </div>
+            <span className="mt-auto text-sm font-medium text-brand-navy group-hover:underline">
+              Go to {s.title} &rarr;
+            </span>
+          </Link>
+        ))}
+      </div>
+    </main>
   );
 }

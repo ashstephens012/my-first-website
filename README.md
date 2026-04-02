@@ -1,36 +1,186 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# My First Website
+
+A Next.js application featuring a Learning Management System (LMS) and HubSpot Monthly Reporting for orthodontic practices.
+
+## Features
+
+### Learning Management System (LMS)
+- Course creation and management
+- Lesson organization with resources
+- User authentication and enrollment tracking
+- Progress monitoring
+
+### HubSpot Monthly Reporting
+- Automated monthly activity reports for orthodontic practice members
+- Integration with HubSpot CRM (read-only)
+- AI-powered content summarization using Anthropic Claude
+- PDF report generation
+- Consultant dashboard for review and management
+- Automated report generation via Vercel Cron
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router, TypeScript)
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: NextAuth.js
+- **Styling**: Tailwind CSS
+- **APIs**:
+  - HubSpot API (CRM data)
+  - Anthropic Claude API (AI summarization)
+- **PDF Generation**: @react-pdf/renderer
+- **File Storage**: AWS S3
+- **Deployment**: Vercel
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+ and pnpm
+- PostgreSQL database (or Vercel Postgres)
+- HubSpot account with Private App access
+- Anthropic API key
+- AWS S3 bucket (optional, for file storage)
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd my-first-website
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+pnpm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Set up environment variables:
+```bash
+cp .env.example .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Edit `.env.local` and configure:
+- `DATABASE_URL` - PostgreSQL connection string
+- `NEXTAUTH_SECRET` - Generate with `openssl rand -base64 32`
+- `HUBSPOT_API_KEY` - Follow [HUBSPOT_SETUP.md](./HUBSPOT_SETUP.md)
+- `ANTHROPIC_API_KEY` - Get from Anthropic Console
+- `CRON_SECRET` - Generate random string for cron job authentication
+- AWS S3 credentials (if using S3 storage)
 
-## Learn More
+4. Set up database:
+```bash
+pnpm prisma:generate
+pnpm prisma:migrate
+```
 
-To learn more about Next.js, take a look at the following resources:
+5. Run development server:
+```bash
+pnpm dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Open [http://localhost:3000](http://localhost:3000) to see the application.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── api/               # API routes
+│   │   ├── auth/         # NextAuth endpoints
+│   │   ├── cron/         # Automated tasks
+│   │   └── reports/      # Report API endpoints
+│   ├── dashboard/        # Dashboard pages
+│   │   ├── members/      # Member management
+│   │   └── reports/      # Report management
+│   └── actions/          # Server actions
+├── components/           # React components
+├── lib/                  # Library code
+│   ├── hubspot/         # HubSpot API integration
+│   ├── ai/              # AI summarization
+│   ├── reports/         # Report generation logic
+│   ├── pdf/             # PDF generation
+│   ├── prisma.ts        # Prisma client
+│   └── auth.ts          # Auth utilities
+└── types/               # TypeScript types
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## HubSpot Integration Setup
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The reporting system integrates with HubSpot to fetch email and meeting data. See [HUBSPOT_SETUP.md](./HUBSPOT_SETUP.md) for detailed setup instructions.
+
+**Key Points:**
+- All HubSpot operations are READ-ONLY
+- Requires HubSpot Private App with specific scopes
+- Company IDs link Members to HubSpot records
+
+## Usage
+
+### Managing Members
+
+1. Navigate to `/dashboard/members`
+2. Add members with their HubSpot Company IDs
+3. View member details and their reports
+
+### Generating Reports
+
+**Manual Generation:**
+1. Go to `/dashboard/reports/generate`
+2. Select member and month
+3. System will:
+   - Fetch activities from HubSpot
+   - Generate AI summaries
+   - Create draft report for review
+
+**Automated Generation:**
+- Configured via Vercel Cron
+- Runs on 1st of each month at midnight
+- Generates reports for all active members for previous month
+
+### Reviewing Reports
+
+1. View reports at `/dashboard/reports`
+2. Click a report to see details
+3. Review activities and summaries
+4. Mark as "Reviewed" when ready
+5. Download PDF for distribution
+6. Mark as "Sent" after delivery
+
+## Deployment
+
+### Vercel Deployment
+
+1. Push code to GitHub
+2. Import project in Vercel
+3. Configure environment variables
+4. Deploy
+
+**Important:** Set `CRON_SECRET` in Vercel environment variables for automated report generation.
+
+### Database Migration on Vercel
+
+Migrations run automatically on deployment via the `ci` script in `package.json`.
+
+## Scripts
+
+- `pnpm dev` - Start development server
+- `pnpm build` - Build for production
+- `pnpm start` - Start production server
+- `pnpm prisma:generate` - Generate Prisma client
+- `pnpm prisma:migrate` - Run database migrations
+- `pnpm test` - Run tests
+- `pnpm test:e2e` - Run Playwright E2E tests
+
+## Contributing
+
+1. Create a feature branch
+2. Make your changes
+3. Write/update tests
+4. Submit a pull request
+
+## License
+
+MIT
+
+## Support
+
+For issues and questions, please open an issue on GitHub.

@@ -21,4 +21,29 @@ export async function getPresignedUploadUrl(key: string, contentType = "applicat
   return url;
 }
 
+/**
+ * Upload a file buffer directly to S3
+ * Returns the public URL of the uploaded file
+ */
+export async function uploadToS3(
+  buffer: Buffer,
+  key: string,
+  contentType: string = "application/octet-stream"
+): Promise<string> {
+  if (!bucket) throw new Error("S3_BUCKET is not configured");
+
+  const cmd = new PutObjectCommand({
+    Bucket: bucket,
+    Key: key,
+    Body: buffer,
+    ContentType: contentType,
+    ACL: "private",
+  });
+
+  await s3.send(cmd);
+
+  // Return the S3 URL
+  return `https://${bucket}.s3.${region}.amazonaws.com/${key}`;
+}
+
 export default s3;

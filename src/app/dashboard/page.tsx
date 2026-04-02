@@ -1,12 +1,26 @@
-import Protected from '@/components/Protected';
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { getStaffMembers } from '@/lib/staff/queries';
+import StaffDashboard from '@/components/StaffDashboard';
 
-export default function DashboardPage() {
+export const dynamic = 'force-dynamic';
+
+export default async function DashboardPage() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) redirect('/signin');
+
+  const { members, staffRole } = await getStaffMembers(session.user.name);
+
+  if (members.length === 0 || !staffRole) {
+    redirect('/dashboard/reports');
+  }
+
   return (
-    <Protected>
-      <div className="max-w-4xl mx-auto py-12">
-        <h1 className="text-2xl font-semibold">Learner Dashboard</h1>
-        <p className="mt-4 text-gray-600">Your enrolled courses and progress will appear here.</p>
-      </div>
-    </Protected>
+    <StaffDashboard
+      userName={session.user.name ?? ''}
+      members={members}
+      staffRole={staffRole}
+    />
   );
 }

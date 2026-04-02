@@ -34,9 +34,9 @@ export default function SignInPage() {
         </div>
         {error && <div className="text-red-600">{error}</div>}
         <div className="flex gap-2 items-center">
-          <button className="px-4 py-2 bg-blue-600 text-white rounded" type="submit">Sign in</button>
+          <button className="px-4 py-2 bg-brand-navy text-white rounded" type="submit">Sign in</button>
           <button type="button" onClick={() => signIn("google")} className="px-4 py-2 border rounded">Sign in with Google</button>
-          <a href="/signin/request-reset" className="ml-auto text-sm text-blue-600">Forgot password?</a>
+          <a href="/signin/request-reset" className="ml-auto text-sm text-brand-navy">Forgot password?</a>
         </div>
       </form>
     </div>

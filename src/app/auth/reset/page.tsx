@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
-export default function ResetPage() {
+function ResetForm() {
   const params = useSearchParams();
   const router = useRouter();
   const token = params?.get("token") || "";
@@ -42,10 +42,18 @@ export default function ResetPage() {
         </div>
         {status && <div className="text-sm text-gray-700">{status}</div>}
         <div className="flex items-center gap-2">
-          <button className="px-4 py-2 bg-blue-600 text-white rounded" type="submit">Set password</button>
-          <a href="/signin" className="text-sm text-blue-600">Back to sign in</a>
+          <button className="px-4 py-2 bg-brand-navy text-white rounded" type="submit">Set password</button>
+          <a href="/signin" className="text-sm text-brand-navy">Back to sign in</a>
         </div>
       </form>
     </div>
+  );
+}
+
+export default function ResetPage() {
+  return (
+    <Suspense fallback={<div className="max-w-md mx-auto py-16">Loading...</div>}>
+      <ResetForm />
+    </Suspense>
   );
 }

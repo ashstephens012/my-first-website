@@ -30,8 +30,8 @@ export default function RequestResetPage() {
         </div>
         {status && <div className="text-sm text-gray-700">{status}</div>}
         <div className="flex items-center gap-2">
-          <button className="px-4 py-2 bg-blue-600 text-white rounded" type="submit">Request reset</button>
-          <a href="/signin" className="text-sm text-blue-600">Back to sign in</a>
+          <button className="px-4 py-2 bg-brand-navy text-white rounded" type="submit">Request reset</button>
+          <a href="/signin" className="text-sm text-brand-navy">Back to sign in</a>
         </div>
       </form>
     </div>
