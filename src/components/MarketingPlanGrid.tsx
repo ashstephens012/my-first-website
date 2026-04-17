@@ -1,5 +1,26 @@
 const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
+/** Map known activity labels to distinct pill colors */
+const LABEL_COLORS: Record<string, string> = {
+  'Blog Post':          'bg-sky-100 text-sky-800',
+  'Lead Promo':         'bg-violet-100 text-violet-800',
+  'Dental Newsletter':  'bg-emerald-100 text-emerald-800',
+  'CPD Event':          'bg-pink-100 text-pink-800',
+  'Letterbox Drop':     'bg-orange-100 text-orange-800',
+  'Local Initiative':   'bg-teal-100 text-teal-800',
+  'GP/Dental Visit':    'bg-indigo-100 text-indigo-800',
+  'Community Event':    'bg-rose-100 text-rose-800',
+  'Summer Holidays':    'bg-yellow-100 text-yellow-800',
+  'Easter Break':       'bg-lime-100 text-lime-800',
+  'Winter Break':       'bg-cyan-100 text-cyan-800',
+  'Spring Break':       'bg-fuchsia-100 text-fuchsia-800',
+};
+const DEFAULT_PILL = 'bg-gray-100 text-gray-700';
+
+function getPillColor(label: string): string {
+  return LABEL_COLORS[label] ?? DEFAULT_PILL;
+}
+
 type Activity = {
   id: string;
   month: number;
@@ -120,7 +141,7 @@ export default function MarketingPlanGrid({ plan }: { plan: MarketingPlan }) {
                           {activities.map((a) => (
                             <span
                               key={a.id}
-                              className="inline-block px-2 py-0.5 rounded-full text-[11px] font-medium leading-tight bg-white/70 text-brand-navy"
+                              className={`inline-block px-2 py-0.5 rounded-full text-[11px] font-medium leading-tight ${getPillColor(a.label)}`}
                             >
                               {a.label}
                             </span>
