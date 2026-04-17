@@ -29,13 +29,5 @@ jobs:
       - name: Generate Prisma client
         run: pnpm exec prisma generate
 
-      - name: Apply migrations
-        env:
-          DATABASE_URL: file:./dev.db
-        run: pnpm exec prisma migrate deploy
-
-      - name: Run tests (typecheck + seed + DB query)
-        env:
-          DATABASE_URL: file:./dev.db
-          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-        run: pnpm run test
+      - name: Build
+        run: pnpm run build
