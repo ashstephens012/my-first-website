@@ -24,6 +24,8 @@ import AdminRefreshPrmButton from '@/components/AdminRefreshPrmButton';
 import QuarterlyFocusManager from '@/components/QuarterlyFocusManager';
 import DeliverablesManager from '@/components/DeliverablesManager';
 import AnnualTargetBar from '@/components/AnnualTargetBar';
+import MarketingPlanGrid from '@/components/MarketingPlanGrid';
+import MarketingPlanBuilder from '@/components/MarketingPlanBuilder';
 
 export default async function MemberPage({
   params,
@@ -394,6 +396,27 @@ export default async function MemberPage({
             }))}
           />
         </div>
+
+        {/* Marketing Plan Section */}
+        {(() => {
+          const marketingPlan = member.marketingPlans?.find((p) => p.year === currentYear) ?? null;
+          return (
+            <div className="bg-brand-blue/20 rounded-lg shadow-sm border border-brand-blue/40 p-6 mb-8">
+              <h2 className="text-2xl font-bold text-brand-navy mb-4">12-Month Strategic Marketing Plan</h2>
+              <hr className="border-brand-blue/40 mb-6" />
+              {marketingPlan && (
+                <div className="mb-6">
+                  <MarketingPlanGrid plan={marketingPlan} />
+                </div>
+              )}
+              <MarketingPlanBuilder
+                memberId={member.id}
+                membershipTier={member.membershipTier ?? null}
+                plan={marketingPlan}
+              />
+            </div>
+          );
+        })()}
 
         {/* Upcoming Meetings */}
         {isHubSpotConfigured() && member.hubspotCompanyId && (

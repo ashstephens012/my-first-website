@@ -265,6 +265,15 @@ export async function getMemberWithReports(memberId: string) {
           include: { completions: true },
           orderBy: [{ category: 'asc' }, { name: 'asc' }],
         },
+        marketingPlans: {
+          include: {
+            channels: {
+              orderBy: { sortOrder: 'asc' },
+              include: { activities: { orderBy: [{ month: 'asc' }, { sortOrder: 'asc' }] } },
+            },
+          },
+          orderBy: { year: 'desc' },
+        },
       },
     });
 

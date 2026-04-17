@@ -89,6 +89,7 @@ model Member {
   prmContactCounts       PrmContactCount[]
   quarterlyFocuses       QuarterlyFocus[]
   deliverables           MemberDeliverable[]
+  marketingPlans         MarketingPlan[]
 }
 
 model CaseStartSubmission {
@@ -185,6 +186,49 @@ model ReportActivity {
   summary         String?
   participants    String?
   metadata        Json?
+}
+
+// Marketing Plan Models
+
+model MarketingPlan {
+  id        String             @id @default(cuid())
+  memberId  String
+  member    Member             @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  year      Int
+  channels  MarketingChannel[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  @@unique([memberId, year])
+}
+
+model MarketingChannel {
+  id              String              @id @default(cuid())
+  marketingPlanId String
+  marketingPlan   MarketingPlan       @relation(fields: [marketingPlanId], references: [id], onDelete: Cascade)
+  name            String
+  alwaysOn        Boolean             @default(false)
+  description     String?
+  sortOrder       Int                 @default(0)
+  activities      MarketingActivity[]
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  @@unique([marketingPlanId, name])
+}
+
+model MarketingActivity {
+  id                 String           @id @default(cuid())
+  marketingChannelId String
+  marketingChannel   MarketingChannel @relation(fields: [marketingChannelId], references: [id], onDelete: Cascade)
+  month              Int
+  label              String
+  ownership          String           @default("TIO")
+  sortOrder          Int              @default(0)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  @@index([marketingChannelId, month])
 }
 
 // Course Builder Models

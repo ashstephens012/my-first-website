@@ -26,6 +26,7 @@ export default function PortalNav() {
       <div className="flex items-center gap-4">
         <Link href="/portal" className={linkClass("/portal")}>Home</Link>
         <Link href="/portal/case-starts" className={linkClass("/portal/case-starts")}>Case Starts</Link>
+        <Link href="/portal/marketing-plan" className={linkClass("/portal/marketing-plan")}>Marketing Plan</Link>
         {session?.user?.portalTier !== 2 && (
           <Link href="/portal/reports" className={linkClass("/portal/reports")}>Reports</Link>
         )}
