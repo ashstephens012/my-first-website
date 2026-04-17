@@ -23,6 +23,38 @@ type MarketingPlan = {
   channels: Channel[];
 };
 
+/**
+ * Determine the dominant ownership for a channel row.
+ * If all activities share the same owner, use that.
+ * For always-on channels with no activities, infer from the description/name.
+ */
+function getChannelOwnership(channel: Channel): 'TIO' | 'PRACTICE' | null {
+  if (channel.activities.length > 0) {
+    const owners = new Set(channel.activities.map((a) => a.ownership));
+    if (owners.size === 1) return channel.activities[0].ownership as 'TIO' | 'PRACTICE';
+    // Mixed — count majority
+    const tioCount = channel.activities.filter((a) => a.ownership === 'TIO').length;
+    return tioCount >= channel.activities.length / 2 ? 'TIO' : 'PRACTICE';
+  }
+  // Always-on with no activities — infer from name/description
+  if (channel.alwaysOn) {
+    const text = `${channel.name} ${channel.description ?? ''}`.toLowerCase();
+    if (text.includes('practice') || text.includes('social media')) return 'PRACTICE';
+    return 'TIO';
+  }
+  return null;
+}
+
+function getRowColors(ownership: 'TIO' | 'PRACTICE' | null) {
+  if (ownership === 'TIO') {
+    return { bg: 'bg-red-50', stickyBg: 'bg-red-50', border: 'border-b border-red-100' };
+  }
+  if (ownership === 'PRACTICE') {
+    return { bg: 'bg-amber-50', stickyBg: 'bg-amber-50', border: 'border-b border-amber-100' };
+  }
+  return { bg: 'bg-white', stickyBg: 'bg-white', border: 'border-b border-gray-100' };
+}
+
 export default function MarketingPlanGrid({ plan }: { plan: MarketingPlan }) {
   return (
     <div>
@@ -44,18 +76,19 @@ export default function MarketingPlanGrid({ plan }: { plan: MarketingPlan }) {
             </tr>
           </thead>
           <tbody>
-            {plan.channels.map((channel, idx) => {
-              const rowBg = idx % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+            {plan.channels.map((channel) => {
+              const ownership = getChannelOwnership(channel);
+              const colors = getRowColors(ownership);
 
               if (channel.alwaysOn) {
                 return (
-                  <tr key={channel.id} className={rowBg}>
-                    <td className={`sticky left-0 z-10 ${rowBg} px-4 py-3 text-sm font-semibold text-brand-navy border-b border-gray-100`}>
+                  <tr key={channel.id} className={colors.bg}>
+                    <td className={`sticky left-0 z-10 ${colors.stickyBg} px-4 py-3 text-sm font-semibold text-brand-navy ${colors.border}`}>
                       {channel.name}
                     </td>
                     <td
                       colSpan={12}
-                      className="px-4 py-3 text-sm italic text-gray-500 border-b border-gray-100"
+                      className={`px-4 py-3 text-sm italic text-gray-500 ${colors.border}`}
                     >
                       Always on {channel.description ? `\u2014 ${channel.description.replace(/^Always on\s*[—–-]?\s*/i, '')}` : ''}
                     </td>
@@ -71,8 +104,8 @@ export default function MarketingPlanGrid({ plan }: { plan: MarketingPlan }) {
               }
 
               return (
-                <tr key={channel.id} className={rowBg}>
-                  <td className={`sticky left-0 z-10 ${rowBg} px-4 py-3 text-sm font-semibold text-brand-navy border-b border-gray-100`}>
+                <tr key={channel.id} className={colors.bg}>
+                  <td className={`sticky left-0 z-10 ${colors.stickyBg} px-4 py-3 text-sm font-semibold text-brand-navy ${colors.border}`}>
                     {channel.name}
                   </td>
                   {MONTHS.map((_, mIdx) => {
@@ -81,17 +114,13 @@ export default function MarketingPlanGrid({ plan }: { plan: MarketingPlan }) {
                     return (
                       <td
                         key={month}
-                        className="px-1 py-2 text-center border-b border-gray-100 align-top"
+                        className={`px-1 py-2 text-center ${colors.border} align-top`}
                       >
                         <div className="flex flex-col items-center gap-1">
                           {activities.map((a) => (
                             <span
                               key={a.id}
-                              className={`inline-block px-2 py-0.5 rounded-full text-[11px] font-medium leading-tight ${
-                                a.ownership === 'TIO'
-                                  ? 'bg-red-100 text-red-900'
-                                  : 'bg-amber-100 text-amber-900'
-                              }`}
+                              className="inline-block px-2 py-0.5 rounded-full text-[11px] font-medium leading-tight bg-white/70 text-brand-navy"
                             >
                               {a.label}
                             </span>
@@ -110,11 +139,11 @@ export default function MarketingPlanGrid({ plan }: { plan: MarketingPlan }) {
       {/* Legend */}
       <div className="flex items-center gap-6 mt-3 text-xs text-gray-500">
         <span className="flex items-center gap-1.5">
-          <span className="inline-block w-3 h-3 rounded-full bg-red-100 border border-red-200" />
+          <span className="inline-block w-3 h-3 rounded bg-red-50 border border-red-200" />
           Managed by TIO
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="inline-block w-3 h-3 rounded-full bg-amber-100 border border-amber-200" />
+          <span className="inline-block w-3 h-3 rounded bg-amber-50 border border-amber-200" />
           Managed by Practice (with TIO support)
         </span>
       </div>
