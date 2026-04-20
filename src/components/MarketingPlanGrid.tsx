@@ -4,11 +4,11 @@ const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', '
 const LABEL_COLORS: Record<string, string> = {
   'Blog Post':          'bg-sky-100 text-sky-800',
   'Lead Promo':         'bg-violet-100 text-violet-800',
-  'Dental Newsletter':  'bg-emerald-100 text-emerald-800',
+  'Newsletter':         'bg-emerald-100 text-emerald-800',
   'CPD Event':          'bg-pink-100 text-pink-800',
   'Letterbox Drop':     'bg-orange-100 text-orange-800',
   'Local Initiative':   'bg-teal-100 text-teal-800',
-  'GP/Dental Visit':    'bg-indigo-100 text-indigo-800',
+  'GDP Visit':          'bg-indigo-100 text-indigo-800',
   'Community Event':    'bg-rose-100 text-rose-800',
   'Summer Holidays':    'bg-yellow-100 text-yellow-800',
   'Easter Break':       'bg-lime-100 text-lime-800',
