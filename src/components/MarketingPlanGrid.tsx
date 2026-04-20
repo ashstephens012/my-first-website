@@ -78,10 +78,10 @@ function getChannelOwnership(channel: Channel): 'TIO' | 'PRACTICE' | null {
 
 function getRowColors(ownership: 'TIO' | 'PRACTICE' | null) {
   if (ownership === 'TIO') {
-    return { bg: 'bg-emerald-50', channelBg: 'bg-emerald-100', border: 'border-b border-emerald-100' };
+    return { bg: 'bg-brand-green/30', channelBg: 'bg-brand-green/60', border: 'border-b border-brand-green' };
   }
   if (ownership === 'PRACTICE') {
-    return { bg: 'bg-sky-50', channelBg: 'bg-sky-100', border: 'border-b border-sky-100' };
+    return { bg: 'bg-brand-blue/30', channelBg: 'bg-brand-blue/60', border: 'border-b border-brand-blue' };
   }
   return { bg: 'bg-white', channelBg: 'bg-gray-100', border: 'border-b border-gray-100' };
 }
@@ -170,11 +170,11 @@ export default function MarketingPlanGrid({ plan }: { plan: MarketingPlan }) {
       {/* Legend */}
       <div className="flex items-center gap-6 mt-3 text-xs text-gray-500">
         <span className="flex items-center gap-1.5">
-          <span className="inline-block w-3 h-3 rounded bg-emerald-100 border border-emerald-200" />
+          <span className="inline-block w-3 h-3 rounded bg-brand-green border border-brand-green" />
           Managed by TIO
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="inline-block w-3 h-3 rounded bg-sky-100 border border-sky-200" />
+          <span className="inline-block w-3 h-3 rounded bg-brand-blue border border-brand-blue" />
           Managed by Practice (with TIO support)
         </span>
       </div>
