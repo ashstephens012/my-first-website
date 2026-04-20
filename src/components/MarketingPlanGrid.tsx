@@ -68,12 +68,12 @@ function getChannelOwnership(channel: Channel): 'TIO' | 'PRACTICE' | null {
 
 function getRowColors(ownership: 'TIO' | 'PRACTICE' | null) {
   if (ownership === 'TIO') {
-    return { bg: 'bg-red-50', stickyBg: 'bg-red-50', border: 'border-b border-red-100' };
+    return { bg: 'bg-red-50', channelBg: 'bg-red-100', border: 'border-b border-red-100' };
   }
   if (ownership === 'PRACTICE') {
-    return { bg: 'bg-amber-50', stickyBg: 'bg-amber-50', border: 'border-b border-amber-100' };
+    return { bg: 'bg-amber-50', channelBg: 'bg-amber-100', border: 'border-b border-amber-100' };
   }
-  return { bg: 'bg-white', stickyBg: 'bg-white', border: 'border-b border-gray-100' };
+  return { bg: 'bg-white', channelBg: 'bg-gray-100', border: 'border-b border-gray-100' };
 }
 
 export default function MarketingPlanGrid({ plan }: { plan: MarketingPlan }) {
@@ -83,13 +83,13 @@ export default function MarketingPlanGrid({ plan }: { plan: MarketingPlan }) {
         <table className="w-full border-collapse min-w-[800px]">
           <thead>
             <tr>
-              <th className="sticky left-0 z-10 bg-brand-navy text-white text-xs font-semibold px-4 py-3 text-left min-w-[160px]">
+              <th className="sticky left-0 z-10 bg-brand-navy text-white text-xs font-semibold px-4 py-3 text-left min-w-[160px] border-r border-white/20">
                 Channel
               </th>
-              {MONTHS.map((m) => (
+              {MONTHS.map((m, i) => (
                 <th
                   key={m}
-                  className="bg-brand-navy text-white text-xs font-semibold px-2 py-3 text-center min-w-[80px]"
+                  className={`bg-brand-navy text-white text-xs font-semibold px-2 py-3 text-center min-w-[80px]${i < 11 ? ' border-r border-white/20' : ''}`}
                 >
                   {m}
                 </th>
@@ -104,7 +104,7 @@ export default function MarketingPlanGrid({ plan }: { plan: MarketingPlan }) {
               if (channel.alwaysOn) {
                 return (
                   <tr key={channel.id} className={colors.bg}>
-                    <td className={`sticky left-0 z-10 ${colors.stickyBg} px-4 py-3 text-sm font-semibold text-brand-navy ${colors.border}`}>
+                    <td className={`sticky left-0 z-10 ${colors.channelBg} px-4 py-3 text-sm font-semibold text-brand-navy ${colors.border} border-r border-gray-200`}>
                       {channel.name}
                     </td>
                     <td
@@ -126,7 +126,7 @@ export default function MarketingPlanGrid({ plan }: { plan: MarketingPlan }) {
 
               return (
                 <tr key={channel.id} className={colors.bg}>
-                  <td className={`sticky left-0 z-10 ${colors.stickyBg} px-4 py-3 text-sm font-semibold text-brand-navy ${colors.border}`}>
+                  <td className={`sticky left-0 z-10 ${colors.channelBg} px-4 py-3 text-sm font-semibold text-brand-navy ${colors.border} border-r border-gray-200`}>
                     {channel.name}
                   </td>
                   {MONTHS.map((_, mIdx) => {
@@ -135,13 +135,13 @@ export default function MarketingPlanGrid({ plan }: { plan: MarketingPlan }) {
                     return (
                       <td
                         key={month}
-                        className={`px-1 py-2 text-center ${colors.border} align-top`}
+                        className={`px-1 py-2 text-center ${colors.border} align-top${mIdx < 11 ? ' border-r border-gray-100' : ''}`}
                       >
                         <div className="flex flex-col items-center gap-1">
                           {activities.map((a) => (
                             <span
                               key={a.id}
-                              className={`inline-block px-2 py-0.5 rounded-full text-[11px] font-medium leading-tight ${getPillColor(a.label)}`}
+                              className={`inline-block px-2 py-0.5 rounded text-[11px] font-medium leading-tight ${getPillColor(a.label)}`}
                             >
                               {a.label}
                             </span>
