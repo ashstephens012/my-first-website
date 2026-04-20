@@ -30,9 +30,13 @@ export const MARKETING_PLAN_TEMPLATES: Record<string, ChannelTemplate[]> = {
       sortOrder: 1,
       activities: [
         { month: 2, label: 'Blog Post', ownership: 'TIO' },
+        { month: 3, label: 'Website Optimisation', ownership: 'TIO' },
         { month: 5, label: 'Blog Post', ownership: 'TIO' },
+        { month: 6, label: 'Website Optimisation', ownership: 'TIO' },
         { month: 8, label: 'Blog Post', ownership: 'TIO' },
+        { month: 9, label: 'Website Optimisation', ownership: 'TIO' },
         { month: 11, label: 'Blog Post', ownership: 'TIO' },
+        { month: 12, label: 'Website Optimisation', ownership: 'TIO' },
       ],
     },
     {
@@ -117,11 +121,17 @@ export const MARKETING_PLAN_TEMPLATES: Record<string, ChannelTemplate[]> = {
       sortOrder: 1,
       activities: [
         { month: 1, label: 'Blog Post', ownership: 'TIO' },
+        { month: 2, label: 'Website Optimisation', ownership: 'TIO' },
         { month: 3, label: 'Blog Post', ownership: 'TIO' },
+        { month: 4, label: 'Website Optimisation', ownership: 'TIO' },
         { month: 5, label: 'Blog Post', ownership: 'TIO' },
+        { month: 6, label: 'Website Optimisation', ownership: 'TIO' },
         { month: 7, label: 'Blog Post', ownership: 'TIO' },
+        { month: 8, label: 'Website Optimisation', ownership: 'TIO' },
         { month: 9, label: 'Blog Post', ownership: 'TIO' },
+        { month: 10, label: 'Website Optimisation', ownership: 'TIO' },
         { month: 11, label: 'Blog Post', ownership: 'TIO' },
+        { month: 12, label: 'Website Optimisation', ownership: 'TIO' },
       ],
     },
     {

@@ -3,6 +3,7 @@ const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', '
 /** Map known activity labels to distinct pill colors */
 const LABEL_COLORS: Record<string, string> = {
   'Blog Post':          'bg-sky-100 text-sky-800',
+  'Website Optimisation': 'bg-slate-200 text-slate-800',
   'Lead Promo':         'bg-violet-100 text-violet-800',
   'Newsletter':         'bg-emerald-100 text-emerald-800',
   'CPD Event':          'bg-pink-100 text-pink-800',
