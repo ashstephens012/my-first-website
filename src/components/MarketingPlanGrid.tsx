@@ -60,7 +60,7 @@ function getChannelOwnership(channel: Channel): 'TIO' | 'PRACTICE' | null {
   // Always-on with no activities — infer from name/description
   if (channel.alwaysOn) {
     const text = `${channel.name} ${channel.description ?? ''}`.toLowerCase();
-    if (text.includes('practice') || text.includes('social media')) return 'PRACTICE';
+    if (text.includes('practice') || text.includes('social media') || text.includes('google my business')) return 'PRACTICE';
     return 'TIO';
   }
   return null;
