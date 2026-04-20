@@ -54,7 +54,6 @@ const PRACTICE_CHANNELS = new Set([
   'social media',
   'google my business',
   'crm - email',
-  'crm - sms',
 ]);
 
 function getChannelOwnership(channel: Channel): 'TIO' | 'PRACTICE' | null {

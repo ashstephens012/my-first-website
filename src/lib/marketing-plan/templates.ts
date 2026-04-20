@@ -36,10 +36,24 @@ export const MARKETING_PLAN_TEMPLATES: Record<string, ChannelTemplate[]> = {
       ],
     },
     {
+      name: 'Social Media',
+      alwaysOn: true,
+      description: 'Always on — Practice-managed social content',
+      sortOrder: 2,
+      activities: [],
+    },
+    {
+      name: 'Google My Business',
+      alwaysOn: true,
+      description: 'Always on — Listing optimisation & posts',
+      sortOrder: 3,
+      activities: [],
+    },
+    {
       name: 'CRM - Email',
       alwaysOn: false,
       description: undefined,
-      sortOrder: 2,
+      sortOrder: 4,
       activities: [
         { month: 1, label: 'Lead Promo', ownership: 'TIO' },
         { month: 3, label: 'Dental Newsletter', ownership: 'TIO' },
@@ -52,36 +66,10 @@ export const MARKETING_PLAN_TEMPLATES: Record<string, ChannelTemplate[]> = {
       ],
     },
     {
-      name: 'CRM - SMS',
-      alwaysOn: false,
-      description: undefined,
-      sortOrder: 3,
-      activities: [
-        { month: 1, label: 'Lead Promo', ownership: 'TIO' },
-        { month: 4, label: 'Lead Promo', ownership: 'TIO' },
-        { month: 7, label: 'Lead Promo', ownership: 'TIO' },
-        { month: 10, label: 'Lead Promo', ownership: 'TIO' },
-      ],
-    },
-    {
-      name: 'Social Media',
-      alwaysOn: true,
-      description: 'Always on — Practice-managed social content',
-      sortOrder: 4,
-      activities: [],
-    },
-    {
-      name: 'Google My Business',
-      alwaysOn: true,
-      description: 'Always on — Listing optimisation & posts',
-      sortOrder: 5,
-      activities: [],
-    },
-    {
       name: 'Local Area Marketing',
       alwaysOn: false,
       description: undefined,
-      sortOrder: 6,
+      sortOrder: 5,
       activities: [
         { month: 2, label: 'Letterbox Drop', ownership: 'PRACTICE' },
         { month: 5, label: 'Local Initiative', ownership: 'PRACTICE' },
@@ -93,7 +81,7 @@ export const MARKETING_PLAN_TEMPLATES: Record<string, ChannelTemplate[]> = {
       name: 'Events',
       alwaysOn: false,
       description: undefined,
-      sortOrder: 7,
+      sortOrder: 6,
       activities: [
         { month: 3, label: 'GP/Dental Visit', ownership: 'PRACTICE' },
         { month: 6, label: 'Community Event', ownership: 'PRACTICE' },
@@ -105,7 +93,7 @@ export const MARKETING_PLAN_TEMPLATES: Record<string, ChannelTemplate[]> = {
       name: 'School Holidays',
       alwaysOn: false,
       description: undefined,
-      sortOrder: 8,
+      sortOrder: 7,
       activities: [
         { month: 1, label: 'Summer Holidays', ownership: 'PRACTICE' },
         { month: 4, label: 'Easter Break', ownership: 'PRACTICE' },
@@ -137,10 +125,24 @@ export const MARKETING_PLAN_TEMPLATES: Record<string, ChannelTemplate[]> = {
       ],
     },
     {
+      name: 'Social Media',
+      alwaysOn: true,
+      description: 'Always on — Practice-managed social content',
+      sortOrder: 2,
+      activities: [],
+    },
+    {
+      name: 'Google My Business',
+      alwaysOn: true,
+      description: 'Always on — Listing optimisation & posts',
+      sortOrder: 3,
+      activities: [],
+    },
+    {
       name: 'CRM - Email',
       alwaysOn: false,
       description: undefined,
-      sortOrder: 2,
+      sortOrder: 4,
       activities: [
         { month: 1, label: 'Lead Promo', ownership: 'TIO' },
         { month: 2, label: 'CPD Event', ownership: 'TIO' },
@@ -157,36 +159,10 @@ export const MARKETING_PLAN_TEMPLATES: Record<string, ChannelTemplate[]> = {
       ],
     },
     {
-      name: 'CRM - SMS',
-      alwaysOn: false,
-      description: undefined,
-      sortOrder: 3,
-      activities: [
-        { month: 1, label: 'Lead Promo', ownership: 'TIO' },
-        { month: 4, label: 'Lead Promo', ownership: 'TIO' },
-        { month: 7, label: 'Lead Promo', ownership: 'TIO' },
-        { month: 10, label: 'Lead Promo', ownership: 'TIO' },
-      ],
-    },
-    {
-      name: 'Social Media',
-      alwaysOn: true,
-      description: 'Always on — Practice-managed social content',
-      sortOrder: 4,
-      activities: [],
-    },
-    {
-      name: 'Google My Business',
-      alwaysOn: true,
-      description: 'Always on — Listing optimisation & posts',
-      sortOrder: 5,
-      activities: [],
-    },
-    {
       name: 'Local Area Marketing',
       alwaysOn: false,
       description: undefined,
-      sortOrder: 6,
+      sortOrder: 5,
       activities: [
         { month: 2, label: 'Letterbox Drop', ownership: 'PRACTICE' },
         { month: 5, label: 'Local Initiative', ownership: 'PRACTICE' },
@@ -198,7 +174,7 @@ export const MARKETING_PLAN_TEMPLATES: Record<string, ChannelTemplate[]> = {
       name: 'Events',
       alwaysOn: false,
       description: undefined,
-      sortOrder: 7,
+      sortOrder: 6,
       activities: [
         { month: 3, label: 'GP/Dental Visit', ownership: 'PRACTICE' },
         { month: 6, label: 'Community Event', ownership: 'PRACTICE' },
@@ -210,7 +186,7 @@ export const MARKETING_PLAN_TEMPLATES: Record<string, ChannelTemplate[]> = {
       name: 'School Holidays',
       alwaysOn: false,
       description: undefined,
-      sortOrder: 8,
+      sortOrder: 7,
       activities: [
         { month: 1, label: 'Summer Holidays', ownership: 'PRACTICE' },
         { month: 4, label: 'Easter Break', ownership: 'PRACTICE' },
