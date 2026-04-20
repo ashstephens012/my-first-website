@@ -49,7 +49,18 @@ type MarketingPlan = {
  * If all activities share the same owner, use that.
  * For always-on channels with no activities, infer from the description/name.
  */
+/** Channels that should always be classified as Practice-managed */
+const PRACTICE_CHANNELS = new Set([
+  'social media',
+  'google my business',
+  'crm - email',
+  'crm - sms',
+]);
+
 function getChannelOwnership(channel: Channel): 'TIO' | 'PRACTICE' | null {
+  // Explicit overrides by channel name
+  if (PRACTICE_CHANNELS.has(channel.name.toLowerCase())) return 'PRACTICE';
+
   if (channel.activities.length > 0) {
     const owners = new Set(channel.activities.map((a) => a.ownership));
     if (owners.size === 1) return channel.activities[0].ownership as 'TIO' | 'PRACTICE';
@@ -60,7 +71,7 @@ function getChannelOwnership(channel: Channel): 'TIO' | 'PRACTICE' | null {
   // Always-on with no activities — infer from name/description
   if (channel.alwaysOn) {
     const text = `${channel.name} ${channel.description ?? ''}`.toLowerCase();
-    if (text.includes('practice') || text.includes('social media') || text.includes('google my business')) return 'PRACTICE';
+    if (text.includes('practice')) return 'PRACTICE';
     return 'TIO';
   }
   return null;
@@ -109,7 +120,7 @@ export default function MarketingPlanGrid({ plan }: { plan: MarketingPlan }) {
                     </td>
                     <td
                       colSpan={12}
-                      className={`px-4 py-3 text-sm italic text-gray-500 ${colors.border}`}
+                      className={`px-4 py-3 text-sm italic text-gray-500 text-center ${colors.border}`}
                     >
                       Always on {channel.description ? `\u2014 ${channel.description.replace(/^Always on\s*[—–-]?\s*/i, '')}` : ''}
                     </td>
