@@ -120,9 +120,15 @@ export default function MarketingPlanGrid({ plan }: { plan: MarketingPlan }) {
                     </td>
                     <td
                       colSpan={12}
-                      className={`px-4 py-3 text-sm italic text-gray-500 text-center ${colors.border}`}
+                      className={`px-6 py-3 ${colors.border}`}
                     >
-                      Always on {channel.description ? `\u2014 ${channel.description.replace(/^Always on\s*[—–-]?\s*/i, '')}` : ''}
+                      <div className="flex items-center gap-4">
+                        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-gray-300" />
+                        <span className="text-sm italic text-gray-500 whitespace-nowrap">
+                          Always on {channel.description ? `\u2014 ${channel.description.replace(/^Always on\s*[—–-]?\s*/i, '')}` : ''}
+                        </span>
+                        <div className="flex-1 h-px bg-gradient-to-l from-transparent via-gray-300 to-gray-300" />
+                      </div>
                     </td>
                   </tr>
                 );
