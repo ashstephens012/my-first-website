@@ -4,7 +4,9 @@
  */
 
 import Anthropic from '@anthropic-ai/sdk';
-import { EXECUTIVE_SUMMARY_PROMPT, MEETING_SUMMARY_PROMPT } from './prompts';
+import { EXECUTIVE_SUMMARY_PROMPT, MEETING_SUMMARY_PROMPT, PERFORMANCE_SUMMARY_PROMPT } from './prompts';
+import type { FunnelData, ConversionRates, RoiData } from '@/types/performance-report';
+import { FUNNEL_STAGE_LABELS } from '@/types/performance-report';
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY || '',
@@ -124,5 +126,63 @@ export async function summarizeMeeting(
   } catch (error) {
     console.error(`Error summarizing meeting "${subject}":`, error);
     return fallback;
+  }
+}
+
+/**
+ * Generate executive summary for a performance report
+ */
+export async function generatePerformanceSummary(
+  practiceName: string,
+  month: string,
+  funnelData: FunnelData,
+  conversionRates: ConversionRates,
+  roiData: RoiData,
+  discrepancies?: { patientName: string; prmStage: string | null; tcTrackerStatus: string }[],
+): Promise<string> {
+  try {
+    const funnelStr = funnelData
+      .map((d) => `- ${FUNNEL_STAGE_LABELS[d.stage]}: ${d.count}`)
+      .join('\n');
+
+    const ratesStr = [
+      `- Lead to Booking: ${conversionRates.leadToBooking !== null ? conversionRates.leadToBooking + '%' : 'N/A'}`,
+      `- Booking to Attendance: ${conversionRates.bookingToAttendance !== null ? conversionRates.bookingToAttendance + '%' : 'N/A'}`,
+      `- Attendance to Treatment Start: ${conversionRates.attendanceToStart !== null ? conversionRates.attendanceToStart + '%' : 'N/A'}`,
+      `- Overall Lead to Start: ${conversionRates.overallLeadToStart !== null ? conversionRates.overallLeadToStart + '%' : 'N/A'}`,
+    ].join('\n');
+
+    let discrepanciesSection = '';
+    if (discrepancies && discrepancies.length > 0) {
+      discrepanciesSection = 'TC Tracker Discrepancies:\n' + discrepancies
+        .slice(0, 10)
+        .map((d) => `- ${d.patientName}: PRM shows "${d.prmStage ?? 'Not in PRM'}", TC Tracker shows "${d.tcTrackerStatus}"`)
+        .join('\n');
+    }
+
+    const prompt = PERFORMANCE_SUMMARY_PROMPT
+      .replace('{practiceName}', practiceName)
+      .replace('{month}', month)
+      .replace('{funnelData}', funnelStr)
+      .replace('{conversionRates}', ratesStr)
+      .replace('{pipelineValue}', `£${roiData.pipelineValue.toLocaleString()}`)
+      .replace('{actualRevenue}', `£${roiData.actualRevenue.toLocaleString()}`)
+      .replace('{potentialLostRevenue}', `£${roiData.potentialLostRevenue.toLocaleString()}`)
+      .replace('{aov}', `£${roiData.averageOrderValue.toLocaleString()}`)
+      .replace('{discrepanciesSection}', discrepanciesSection);
+
+    const message = await anthropic.messages.create({
+      model: MODEL,
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }],
+    });
+
+    const textContent = message.content.find((c) => c.type === 'text');
+    return textContent && 'text' in textContent
+      ? textContent.text.trim()
+      : 'Performance summary not available';
+  } catch (error) {
+    console.error('Error generating performance summary:', error);
+    return 'Unable to generate performance summary';
   }
 }

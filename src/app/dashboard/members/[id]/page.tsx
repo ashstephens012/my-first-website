@@ -26,6 +26,8 @@ import DeliverablesManager from '@/components/DeliverablesManager';
 import AnnualTargetBar from '@/components/AnnualTargetBar';
 import MarketingPlanGrid from '@/components/MarketingPlanGrid';
 import MarketingPlanBuilder from '@/components/MarketingPlanBuilder';
+import PerformanceConfig from '@/components/PerformanceConfig';
+import FunnelMappingConfig from '@/components/FunnelMappingConfig';
 
 export default async function MemberPage({
   params,
@@ -337,6 +339,77 @@ export default async function MemberPage({
                 contactCount: c.contactCount,
               }))}
             />
+          </div>
+        )}
+
+        {/* Practice Performance Section */}
+        {member.allClientsAccountId && member.allClientsApiKey && (
+          <div className="bg-brand-blue/20 rounded-lg shadow-sm border border-brand-blue/40 p-6 mb-8">
+            <h2 className="text-2xl font-bold text-brand-navy mb-4">Practice Performance</h2>
+            <hr className="border-brand-blue/40 mb-6" />
+
+            <h3 className="text-lg font-semibold text-brand-navy mb-3">Performance Config</h3>
+            <PerformanceConfig
+              memberId={member.id}
+              currentAov={member.performanceConfig?.averageOrderValue ?? null}
+              currentSheetId={member.performanceConfig?.tcTrackerSheetId ?? null}
+            />
+
+            <h3 className="text-lg font-semibold text-brand-navy mt-6 mb-3">Funnel Stage Mappings</h3>
+            <FunnelMappingConfig
+              memberId={member.id}
+              existingMappings={(member.funnelStageMappings ?? []).map((m) => ({
+                prmCategoryId: m.prmCategoryId,
+                prmCategoryName: m.prmCategoryName,
+                funnelStage: m.funnelStage,
+              }))}
+              hasPrmCredentials={!!(member.allClientsAccountId && member.allClientsApiKey)}
+            />
+
+            {/* Generate + existing reports */}
+            <div className="mt-6 flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-brand-navy">Performance Reports</h3>
+              <Link
+                href={`/dashboard/performance/generate?memberId=${member.id}`}
+                className="inline-flex items-center px-3 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-brand-navy hover:opacity-90"
+              >
+                <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Generate Report
+              </Link>
+            </div>
+
+            {(member.performanceReports ?? []).length > 0 ? (
+              <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {member.performanceReports.map((r) => {
+                  const monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                  return (
+                    <Link
+                      key={r.id}
+                      href={`/dashboard/performance/${r.id}`}
+                      className="bg-white border border-gray-200 rounded-lg p-3 hover:shadow-sm transition-shadow"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-brand-navy">
+                          {monthNames[r.month]} {r.year}
+                        </span>
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                          r.status === 'draft' ? 'bg-brand-orange/20 text-orange-800' :
+                          r.status === 'reviewed' ? 'bg-brand-blue/30 text-blue-800' :
+                          r.status === 'sent' ? 'bg-brand-green/30 text-green-800' :
+                          'bg-gray-100 text-gray-800'
+                        }`}>
+                          {r.status}
+                        </span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="mt-3 text-sm text-gray-500">No performance reports generated yet.</p>
+            )}
           </div>
         )}
 

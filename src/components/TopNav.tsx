@@ -24,6 +24,7 @@ export default function TopNav() {
         )}
         <Link href="/dashboard" className="text-white/80 hover:text-white">Home</Link>
         <Link href="/dashboard/reports" className="text-white/80 hover:text-white">Reports</Link>
+        <Link href="/dashboard/performance" className="text-white/80 hover:text-white">Performance</Link>
         <Link href="/dashboard/members" className="text-white/80 hover:text-white">Members</Link>
         <Link href="/dashboard/users" className="text-white/80 hover:text-white">Users</Link>
         {session?.user ? (

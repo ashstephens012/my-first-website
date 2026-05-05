@@ -31,3 +31,29 @@ Return a JSON object with:
 
 Respond ONLY with valid JSON, no other text. Example format:
 {"summary": "The team discussed...", "actions": ["Follow up on X", "Schedule Y"]}`;
+
+export const PERFORMANCE_SUMMARY_PROMPT = `You are creating an executive summary for a monthly performance report for an orthodontic practice called {practiceName}.
+This report covers {month} and analyses the patient journey funnel from lead generation through to treatment starts.
+
+Funnel Data:
+{funnelData}
+
+Conversion Rates:
+{conversionRates}
+
+Revenue Metrics (all in GBP):
+- Pipeline Value: {pipelineValue}
+- Actual Revenue: {actualRevenue}
+- Potential Lost Revenue: {potentialLostRevenue}
+- Average Order Value: {aov}
+
+{discrepanciesSection}
+
+Write a 3 paragraph executive summary:
+1. Performance overview — summarise funnel performance, highlighting total leads generated and how they progressed through the funnel. Reference specific numbers.
+2. Revenue picture — discuss the financial impact, referencing pipeline value, actual revenue from treatment starts, and potential lost revenue. Contextualise with the AOV.
+3. Actionable recommendations — provide 2-3 specific, data-driven recommendations to improve conversions at the weakest points in the funnel.
+
+Maintain a professional, consultative tone. Use specific numbers throughout. All monetary values should be in GBP (use the £ symbol).
+
+Executive Summary:`;

@@ -274,6 +274,13 @@ export async function getMemberWithReports(memberId: string) {
           },
           orderBy: { year: 'desc' },
         },
+        performanceConfig: true,
+        funnelStageMappings: {
+          orderBy: { prmCategoryName: 'asc' },
+        },
+        performanceReports: {
+          orderBy: [{ year: 'desc' }, { month: 'desc' }],
+        },
       },
     });
 

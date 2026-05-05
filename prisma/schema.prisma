@@ -90,6 +90,9 @@ model Member {
   quarterlyFocuses       QuarterlyFocus[]
   deliverables           MemberDeliverable[]
   marketingPlans         MarketingPlan[]
+  performanceConfig      MemberPerformanceConfig?
+  funnelStageMappings    FunnelStageMapping[]
+  performanceReports     PerformanceReport[]
 }
 
 model CaseStartSubmission {
@@ -229,6 +232,50 @@ model MarketingActivity {
   updatedAt          DateTime         @updatedAt
 
   @@index([marketingChannelId, month])
+}
+
+// Performance Report Models
+
+model MemberPerformanceConfig {
+  id                String   @id @default(cuid())
+  memberId          String   @unique
+  member            Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  averageOrderValue Float?
+  tcTrackerSheetId  String?
+  funnelMappingDone Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model FunnelStageMapping {
+  id              String   @id @default(cuid())
+  memberId        String
+  member          Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  prmCategoryId   String
+  prmCategoryName String
+  funnelStage     String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([memberId, prmCategoryId])
+}
+
+model PerformanceReport {
+  id              String   @id @default(cuid())
+  memberId        String
+  member          Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  year            Int
+  month           Int
+  status          String   @default("draft")
+  funnelData      Json?
+  roiData         Json?
+  conversionRates Json?
+  averageOrderValue Float?
+  summary         String?
+  generatedAt     DateTime @default(now())
+  pdfUrl          String?
+
+  @@unique([memberId, year, month])
 }
 
 // Course Builder Models
