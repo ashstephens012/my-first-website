@@ -52,11 +52,22 @@ export default function StaffDashboard({ userName, members, staffRole }: StaffDa
   return (
     <div className="max-w-7xl mx-auto py-8 px-4">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-brand-navy">Your Members</h1>
-        <p className="mt-2 text-gray-600">
-          {userName} — {ROLE_LABELS[staffRole]}
-        </p>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-brand-navy">Your Members</h1>
+          <p className="mt-2 text-gray-600">
+            {userName} — {ROLE_LABELS[staffRole]}
+          </p>
+        </div>
+        <Link
+          href="/dashboard/member-management"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-brand-navy text-white text-sm font-medium rounded-lg hover:bg-brand-navy/90 transition-colors"
+        >
+          Member Management
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </Link>
       </div>
 
       {/* Stats row */}
